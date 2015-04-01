@@ -2,10 +2,11 @@ package recipebook;
 
 import java.util.ArrayList;
 
-public class RBT<T extends Comparable<T>> {
+public class RBT<S extends Comparable<S>,T> {
+	private S key;
 	private T head;
-	RBT<T> left;
-	RBT<T> right;
+	RBT<S,T> left;
+	RBT<S,T> right;
 	boolean red;
 	
 	public int size() {
@@ -17,16 +18,16 @@ public class RBT<T extends Comparable<T>> {
 	}
 	
 	// return true if a < b
-	public boolean less (T a, T b) { return (a.compareTo(b) < 0); }
+	public boolean less (S a, S b) { return (a.compareTo(b) < 0); }
 	
 	// return true if a > b
-	public boolean greater (T a, T b) { return (a.compareTo(b) > 0); }
+	public boolean greater (S a, S b) { return (a.compareTo(b) > 0); }
 	
 	// find a given key in the tree
-	public RBT<T> find (T key) {
+	public T find (S key) {
 		if (head == null) 	  return 	null; // not in tree
-		if (head.equals(key)) return 	this; // found it!
-		if (less(key, head))  return 	left.find(key);  // search in left tree
+		if (this.key.equals(key)) return 	this.head; // found it!
+		if (less(key, this.key))  return 	left.find(key);  // search in left tree
 		return 							right.find(key); // search in right tree
 	}
 
@@ -56,6 +57,7 @@ public class RBT<T extends Comparable<T>> {
 		if (right != null) {
 			if (right.head != null) {
 
+				this.key = this.right.key;
 				this.head = this.right.head;
 				this.left = this.right.left;
 				this.right = this.right.right;
@@ -102,15 +104,16 @@ public class RBT<T extends Comparable<T>> {
 	}
 
 	// add a new key to the tree
-	public void insert (T key) {
+	public void insert (S key,T item) {
 		if (this.head == null) {
-			this.head = key;	 // found empty node to insert into
+			this.key = key;	 // found empty node to insert into
+			this.head = item;
 			this.red = true;
-			this.left = new RBT<T>();
-			this.right = new RBT<T>();
+			this.left = new RBT<S,T>();
+			this.right = new RBT<S,T>();
 		}
-		else if (less(key, head)) left.insert(key);	 // must go in left tree
-		else 					  right.insert(key); // must go in right tree
+		else if (less(key, this.key)) left.insert(key, item);	 // must go in left tree
+		else 					  right.insert(key, item); // must go in right tree
 		
 		// realign tree //
 		// if tree is skewed right instead of left
@@ -123,20 +126,24 @@ public class RBT<T extends Comparable<T>> {
 	
 	// rotate a segment left to maintain balance
 	private void rotateLeft () {
-		this.left.left = new RBT<T>(this.left.head, this.left.left, this.left.right);
+		this.left.left = new RBT<S,T>(this.key, this.left.head, this.left.left, this.left.right);
 		this.left.right = this.right.left;
 		this.left.head = this.head;
+		this.left.key = this.key;
 		this.head = this.right.head;
+		this.key = this.right.key;
 		this.right = this.right.right;
 		this.left.red = true;
 	}
 	
 	// rotate a segment right to maintain balance
 	private void rotateRight () {
-		this.right.right = new RBT<T>(this.right.head, this.right.right, this.right.left);
+		this.right.right = new RBT<S,T>(this.key, this.right.head, this.right.right, this.right.left);
 		this.right.left = this.left.right;
 		this.right.head = this.head;
+		this.right.key = this.key;
 		this.head = this.left.head;
+		this.key = this.left.key;
 		this.left = this.left.left;
 		this.right.red = true;
 	}
@@ -157,13 +164,14 @@ public class RBT<T extends Comparable<T>> {
 	// create a tree from just the head
 	public RBT (T head) {
 		this.head = head;
-		this.left = new RBT<T>();
-		this.right = new RBT<T>();
+		this.left = new RBT<S,T>();
+		this.right = new RBT<S,T>();
 		this.red = false;
 	}
 	
 	// create a tree given head and children
-	public RBT (T head, RBT<T> left, RBT<T> right) {
+	public RBT (S key, T head, RBT<S,T> left, RBT<S,T> right) {
+		this.key = key;
 		this.head = head;
 		this.left = left;
 		this.right = right;

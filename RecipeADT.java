@@ -89,6 +89,20 @@ public class RecipeADT {
 		this.directions = directions;
 	}
 	
+	public String data() {
+		String s = "";
+		s += this.recipeName + "\n";
+		s += this.prepTime + "\n";
+		s += this.totalTime + "\n";
+		s += this.servings + "\n";
+		s += this.aboutThisRecipe + "\n";
+		for (String str : ingredients) s += str + ",,";
+		s += "\n";
+		for (String dir : directions) s += dir + ",,";
+		s += "\n";
+		return s;
+	}
+	
 	public String toString() {
 		return this.recipeName;
 	}

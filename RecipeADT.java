@@ -7,7 +7,7 @@ public class RecipeADT {
 	private String recipeName;
 	private String prepTime;
 	private String totalTime;
-	private int servingSize;
+	private String servings;
 	private String aboutThisRecipe;
 	private ArrayList<String> ingredients = null;
 	private ArrayList<String> directions = null;
@@ -17,18 +17,17 @@ public class RecipeADT {
 		recipeName = "";
 		prepTime = "";
 		totalTime = "";
-		servingSize = 0;
 		aboutThisRecipe = "";
 		ingredients = new ArrayList<String>();
 		directions = new ArrayList<String>();
 	}
 	
 	//Create a valid recipe entry
-	public RecipeADT(String name, String prepTime, String totalTime, int servingSize, String aboutThisRecipe, ArrayList<String> ingredients, ArrayList<String> directions){
+	public RecipeADT(String name, String prepTime, String totalTime, String servings, String aboutThisRecipe, ArrayList<String> ingredients, ArrayList<String> directions){
 		this.recipeName = name;
 		this.prepTime = prepTime;
 		this.totalTime = totalTime;
-		this.servingSize = servingSize;
+		this.servings = servings;
 		this.aboutThisRecipe = aboutThisRecipe;
 		this.ingredients = ingredients;
 		this.directions = directions;
@@ -58,12 +57,12 @@ public class RecipeADT {
 		this.totalTime = totalTime;
 	}
 
-	public int getServingSize() {
-		return servingSize;
+	public String getServingSize() {
+		return servings;
 	}
 
-	public void setServingSize(int servingSize) {
-		this.servingSize = servingSize;
+	public void setServingSize(String servings) {
+		this.servings = servings;
 	}
 
 	public String getAboutThisRecipe() {
@@ -90,5 +89,8 @@ public class RecipeADT {
 		this.directions = directions;
 	}
 	
+	public String toString() {
+		return this.recipeName;
+	}
 
 }

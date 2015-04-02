@@ -42,19 +42,19 @@ public class RecipeADT {
 		this.recipeName = recipeName;
 	}
 
-	public double getPrepTime() {
+	public String getPrepTime() {
 		return prepTime;
 	}
 
-	public void setPrepTime(double prepTime) {
+	public void setPrepTime(String prepTime) {
 		this.prepTime = prepTime;
 	}
 
-	public double getTotalTime() {
+	public String getTotalTime() {
 		return totalTime;
 	}
 
-	public void setTotalTime(double totalTime) {
+	public void setTotalTime(String totalTime) {
 		this.totalTime = totalTime;
 	}
 

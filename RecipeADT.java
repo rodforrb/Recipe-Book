@@ -1,10 +1,12 @@
+package recipebook;
+
 import java.util.ArrayList;
 
 public class RecipeADT {
 	
 	private String recipeName;
-	private double prepTime;
-	private double totalTime;
+	private String prepTime;
+	private String totalTime;
 	private int servingSize;
 	private String aboutThisRecipe;
 	private ArrayList<String> ingredients = null;
@@ -13,8 +15,8 @@ public class RecipeADT {
 	//Create a blank Recipe Entry
 	public RecipeADT(){
 		recipeName = "";
-		prepTime = 0;
-		totalTime = 0;
+		prepTime = "";
+		totalTime = "";
 		servingSize = 0;
 		aboutThisRecipe = "";
 		ingredients = new ArrayList<String>();
@@ -22,7 +24,7 @@ public class RecipeADT {
 	}
 	
 	//Create a valid recipe entry
-	public RecipeADT(String name, double prepTime, double totalTime, int servingSize, String aboutThisRecipe, ArrayList<String> ingredients, ArrayList<String> directions){
+	public RecipeADT(String name, String prepTime, String totalTime, int servingSize, String aboutThisRecipe, ArrayList<String> ingredients, ArrayList<String> directions){
 		this.recipeName = name;
 		this.prepTime = prepTime;
 		this.totalTime = totalTime;

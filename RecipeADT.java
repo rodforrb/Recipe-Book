@@ -84,7 +84,7 @@ public class RecipeADT {
 	public ArrayList<String> getDirections() {
 		return directions;
 	}
-
+	
 	public void setDirections(ArrayList<String> directions) {
 		this.directions = directions;
 	}
@@ -104,7 +104,17 @@ public class RecipeADT {
 	}
 	
 	public String toString() {
-		return this.recipeName;
+		String s = "";
+		s += this.recipeName + "\n";
+		s += this.prepTime + "\n";
+		s += this.totalTime + "\n";
+		s += this.servings + "\n";
+		s += this.aboutThisRecipe + "\n";
+		s += "Ingredients:\n";
+		for (String str : ingredients) s += str + "\n";
+		s += "\nDirections:\n";
+		for (String dir : directions) s += dir + "\n";
+		return s;
 	}
 
 }

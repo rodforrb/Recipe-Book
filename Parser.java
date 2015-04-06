@@ -1,5 +1,10 @@
 package recipebook;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -12,6 +17,7 @@ public class Parser {
 	public static void parseHTML () {
 		RecipeADT recipe;
 		String directory, name, description, prepTime, totalTime, servings;
+		double rating;
 		ArrayList<String> ingredients;
 		ArrayList<String> directions;
 		String[] ingredientsArray;
@@ -23,8 +29,7 @@ public class Parser {
 		System.out.println("Progress:");
 		for (int a = 0; a < 5; a++) {
 			System.out.print(20*a);
-			for (int b = 1; b <= 1000; b++) {
-//			for (int b = 1; b <= 100000; b++) {
+			for (int b = 1; b <= 50000; b++) {
 				// draw a progress bar
 				// save every 5000 recipes
 				if (b%5000==0) {
@@ -69,11 +74,56 @@ public class Parser {
 					totalTime = li.get(1).text().split(": ")[1];
 					servings = li.get(2).text().split(": ")[1];
 					
-					recipe = new RecipeADT(name, prepTime, totalTime, servings, description, ingredients, directions);
-					Main.recipes.insert(name, recipe);
+					rating = Double.parseDouble(doc.getElementsByTag("figure").get(0).getElementsByTag("span").text().split("%")[0]);
+					if (rating > 75) {
+						recipe = new RecipeADT(name, rating, prepTime, totalTime, servings, description, ingredients, directions);
+						Main.recipes.insert(name, recipe);
+					}
 					
 				} catch (Exception e) {} // continue on next loop if a recipe isn't valid
 			}
 		}
+	}
+	
+	public static void loadFiles() throws IOException, FileNotFoundException {
+		// read from file
+		BufferedReader reader = new BufferedReader(new FileReader("data/recipes"));
+
+		// read all lines
+		String readLine, name, file;
+		String[] list;
+		ArrayList<String> ingredients, directions;
+		RecipeADT r;
+		BufferedWriter out;
+		while ( (readLine = reader.readLine()) != null) {
+			r = new RecipeADT();
+			// read name
+			name = readLine;
+			r.setRecipeName(name);
+			r.setRating(Double.parseDouble(reader.readLine()));
+			r.setPrepTime(reader.readLine());
+			r.setTotalTime(reader.readLine());
+			r.setServingSize(reader.readLine());
+			r.setAboutThisRecipe(reader.readLine());
+			
+			// read ingredients list
+			ingredients = new ArrayList<String>();
+			r.setIngredients(ingredients);
+			list = reader.readLine().split("\\,\\,");
+			for (String s : list) ingredients.add(s);
+			
+			// read directions list
+			directions = new ArrayList<String>();
+			r.setDirections(directions);
+			list = reader.readLine().split("\\,\\,");
+			for (String s : list) directions.add(s);
+			
+			Main.recipes.insert(name, r);
+			
+			for (String s : ingredients) {
+				Main.recipesByIngredient.insert(s, r);
+			}
+		}
+		reader.close();
 	}
 }

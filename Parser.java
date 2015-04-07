@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import org.jsoup.*;
 import org.jsoup.nodes.*;
@@ -125,5 +126,23 @@ public class Parser {
 			}
 		}
 		reader.close();
+	}
+	
+	private static ArrayList<RecipeADT> parseSearch(String input) {
+		ArrayList<RecipeADT> results = new ArrayList<RecipeADT>();
+		input = input.replaceAll("\\ ", "");
+		String[] searches = input.split(",");
+		// get recipes by ingredient for each search query
+		// intersect results
+		return results;
+	}
+	
+	public static ArrayList<RecipeADT> getSearch() {
+		System.out.print(">>");
+       Scanner in = new Scanner(System.in);
+       String input = in.next();
+       in.close();
+       
+       return parseSearch(input);
 	}
 }

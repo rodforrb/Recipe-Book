@@ -10,7 +10,7 @@ public class RBT<S extends Comparable<S>,T> {
 	boolean red;
 	
 	public int size() {
-		if (head == null) {
+		if (key == null) {
 			return 0;
 		} else {
 			return 1 + left.size() + right.size();
@@ -25,19 +25,19 @@ public class RBT<S extends Comparable<S>,T> {
 	
 	// find a given key in the tree
 	public T find (S key) {
-		if (head == null) 	  return 	null; // not in tree
-		if (this.key.equals(key)) return 	this.head; // found it!
-		if (less(key, this.key))  return 	left.find(key);  // search in left tree
-		return 							right.find(key); // search in right tree
+		if (key == null) 	 	  return 	null;			 // not in tree
+		if (this.key.equals(key)) return 	this.head;		 // found it!
+		if (less(key, this.key))  return 	left.find(key);	 // search in left tree
+		return 								right.find(key); // search in right tree
 	}
 
 	public T min() {
 		// find leftmost node
 		
-		if (this.head == null) return null;
+		if (this.key == null) return null;
 		
 		if (left != null) {
-			if (left.head != null) return left.min();
+			if (left.key != null) return left.min();
 		}
 		
 		return this.head;
@@ -45,17 +45,18 @@ public class RBT<S extends Comparable<S>,T> {
 	
 	public T popMin() {
 		// find leftmost node and remove it
-		if (this.head == null) return null;
+		if (this.key == null) return null;
 		
 		if (left != null) {
-			if (left.head != null) return left.popMin();
+			if (left.key != null) return left.popMin();
 		}
 		
 		T ret = this.head;
 		this.head = null;
+		this.key = null;
 		// readjust tree if necessary
 		if (right != null) {
-			if (right.head != null) {
+			if (right.key != null) {
 
 				this.key = this.right.key;
 				this.head = this.right.head;
@@ -64,23 +65,6 @@ public class RBT<S extends Comparable<S>,T> {
 			}
 		}
 		return ret;
-	}
-	
-	// print the entire tree
-	public void print() {
-		if (head == null) return;
-		left.print();
-		System.out.println(head);
-		right.print();
-	}
-	
-	// draw the tree with spaces (horizontally)
-	public void draw (int n) {
-		if (head == null) return; 
-		right.draw(n+1);
-		for (int i = 0; i < 2*n; i++) System.out.print(' ');
-		System.out.println(head);
-		left.draw(n+1);
 	}
 	
 	// returns the tree as a list
@@ -97,6 +81,20 @@ public class RBT<S extends Comparable<S>,T> {
 		if (right != null) right.list(list);
 	}
 	
+	// get all keys in tree
+	public ArrayList<S> keys() {
+		ArrayList<S> list = new ArrayList<S>();
+		keys(list);
+		return list;
+	}
+
+	// helper to build the tree as a list
+	private void keys(ArrayList<S> list) {
+		if (left != null) left.keys(list);
+		if (key != null) list.add(key);
+		if (right != null) right.keys(list);
+	}
+	
 	/* Red-Black tree methods */
 	
 	private boolean isRed() {
@@ -105,7 +103,7 @@ public class RBT<S extends Comparable<S>,T> {
 
 	// add a new key to the tree
 	public void insert (S key,T item) {
-		if (this.head == null) {
+		if (this.key == null) {
 			this.key = key;	 // found empty node to insert into
 			this.head = item;
 			this.red = true;
@@ -157,15 +155,8 @@ public class RBT<S extends Comparable<S>,T> {
 	
 	/* Initializer methods */
 	public RBT () {
+		this.key = null;
 		this.head = null;
-		this.red = false;
-	}
-	
-	// create a tree from just the head
-	public RBT (T head) {
-		this.head = head;
-		this.left = new RBT<S,T>();
-		this.right = new RBT<S,T>();
 		this.red = false;
 	}
 	

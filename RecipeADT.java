@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class RecipeADT {
 	
 	private String recipeName;
+	private double rating;
 	private String prepTime;
 	private String totalTime;
 	private String servings;
@@ -23,8 +24,9 @@ public class RecipeADT {
 	}
 	
 	//Create a valid recipe entry
-	public RecipeADT(String name, String prepTime, String totalTime, String servings, String aboutThisRecipe, ArrayList<String> ingredients, ArrayList<String> directions){
+	public RecipeADT(String name, double rating, String prepTime, String totalTime, String servings, String aboutThisRecipe, ArrayList<String> ingredients, ArrayList<String> directions){
 		this.recipeName = name;
+		this.rating = rating;
 		this.prepTime = prepTime;
 		this.totalTime = totalTime;
 		this.servings = servings;
@@ -33,65 +35,42 @@ public class RecipeADT {
 		this.directions = directions;
 	}
 
-	public String getRecipeName() {
-		return recipeName;
-	}
+	public String getRecipeName() { return recipeName; }
 
-	public void setRecipeName(String recipeName) {
-		this.recipeName = recipeName;
-	}
-
-	public String getPrepTime() {
-		return prepTime;
-	}
-
-	public void setPrepTime(String prepTime) {
-		this.prepTime = prepTime;
-	}
-
-	public String getTotalTime() {
-		return totalTime;
-	}
-
-	public void setTotalTime(String totalTime) {
-		this.totalTime = totalTime;
-	}
-
-	public String getServingSize() {
-		return servings;
-	}
-
-	public void setServingSize(String servings) {
-		this.servings = servings;
-	}
-
-	public String getAboutThisRecipe() {
-		return aboutThisRecipe;
-	}
-
-	public void setAboutThisRecipe(String aboutThisRecipe) {
-		this.aboutThisRecipe = aboutThisRecipe;
-	}
-
-	public ArrayList<String> getIngredients() {
-		return ingredients;
-	}
-
-	public void setIngredients(ArrayList<String> ingredients) {
-		this.ingredients = ingredients;
-	}
-
-	public ArrayList<String> getDirections() {
-		return directions;
-	}
+	public void setRecipeName(String recipeName) { this.recipeName = recipeName; }
 	
-	public void setDirections(ArrayList<String> directions) {
-		this.directions = directions;
-	}
+	public void setRating(double rating) { this.rating = rating; }
+	
+	public double getrating() { return rating; }
+
+	public String getPrepTime() { return prepTime; }
+
+	public void setPrepTime(String prepTime) { this.prepTime = prepTime; }
+
+	public String getTotalTime() { return totalTime; }
+
+	public void setTotalTime(String totalTime) { this.totalTime = totalTime; }
+
+	public String getServingSize() { return servings; }
+
+	public void setServingSize(String servings) { this.servings = servings; }
+
+	public String getAboutThisRecipe() { return aboutThisRecipe; }
+
+	public void setAboutThisRecipe(String aboutThisRecipe) { this.aboutThisRecipe = aboutThisRecipe; }
+
+	public ArrayList<String> getIngredients() { return ingredients; }
+
+	public void setIngredients(ArrayList<String> ingredients) { this.ingredients = ingredients; }
+
+	public ArrayList<String> getDirections() { return directions; }
+	
+	public void setDirections(ArrayList<String> directions) { this.directions = directions; }
 	
 	public String data() {
 		String s = "";
 		s += this.recipeName + "\n";
+		s += Double.toString(this.rating) + "\n";
 		s += this.prepTime + "\n";
 		s += this.totalTime + "\n";
 		s += this.servings + "\n";
@@ -115,6 +94,12 @@ public class RecipeADT {
 		s += "\nDirections:\n";
 		for (String dir : directions) s += dir + "\n";
 		return s;
+	}
+	
+	public int compareTo(RecipeADT b) {
+		if (rating > b.rating) return  1;
+		if (rating < b.rating) return -1;
+		return 0;
 	}
 
 }

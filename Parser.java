@@ -30,7 +30,7 @@ public class Parser {
 		System.out.println("Progress:");
 		for (int a = 0; a < 5; a++) {
 			System.out.print(20*a);
-			for (int b = 1; b <= 50000; b++) {
+			for (int b = 1; b <= 30000; b++) {
 				// draw a progress bar
 				// save every 5000 recipes
 				if (b%5000==0) {
@@ -76,7 +76,7 @@ public class Parser {
 					servings = li.get(2).text().split(": ")[1];
 					
 					rating = Double.parseDouble(doc.getElementsByTag("figure").get(0).getElementsByTag("span").text().split("%")[0]);
-					if (rating > 75) {
+					if (rating >= 80) {
 						recipe = new RecipeADT(name, rating, prepTime, totalTime, servings, description, ingredients, directions);
 						Main.recipes.insert(name, recipe);
 					}
@@ -126,23 +126,5 @@ public class Parser {
 			}
 		}
 		reader.close();
-	}
-	
-	private static ArrayList<RecipeADT> parseSearch(String input) {
-		ArrayList<RecipeADT> results = new ArrayList<RecipeADT>();
-		input = input.replaceAll("\\ ", "");
-		String[] searches = input.split(",");
-		// get recipes by ingredient for each search query
-		// intersect results
-		return results;
-	}
-	
-	public static ArrayList<RecipeADT> getSearch() {
-		System.out.print(">>");
-       Scanner in = new Scanner(System.in);
-       String input = in.next();
-       in.close();
-       
-       return parseSearch(input);
 	}
 }

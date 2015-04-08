@@ -26,11 +26,6 @@ public class Main {
 		out.close();
 	}
 	
-	public static void getInput() {
-       Scanner in = new Scanner(System.in);
-       String input = in.next();       
-	}
-	
 	public static void main(String[] args) {
 		// load everything necessary
 		System.out.println("Trying to load file...");
@@ -62,6 +57,6 @@ public class Main {
 		}
 		
 		// program sequence
-		
+		Interface.run();
 	}
 }

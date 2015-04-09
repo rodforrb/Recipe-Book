@@ -12,7 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Main {
-	public static HashTable<String, RecipeADT> recipesByIngredient = new HashTable<String, RecipeADT>();
+	public static ListRBT<RecipeADT> recipesByIngredient = new ListRBT<RecipeADT>();
 	public static RBT<String, RecipeADT> recipes = new RBT<String, RecipeADT>();
 	
 	public static void save() throws IOException {

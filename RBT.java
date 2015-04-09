@@ -2,11 +2,11 @@ package recipebook;
 
 import java.util.ArrayList;
 
-public class RBT<S extends Comparable<S>, T> {
+public class RBT<S extends Comparable<S>,T> {
     private S key;
     private T item;
-    RBT<S, T> left;
-    RBT<S, T> right;
+    RBT<S,T> left;
+    RBT<S,T> right;
     boolean red;
 
     public int size() {
@@ -29,13 +29,13 @@ public class RBT<S extends Comparable<S>, T> {
 
     // find a given key in the tree
     public T find(S key) {
-        if (key == null)
+        if (this.key == null)
             return null; // not in tree
         if (this.key.equals(key))
             return this.item; // found it!
         if (less(key, this.key))
             return left.find(key); // search in left tree
-        return right.find(key); // search in right tree
+        return right.find(key);    // search in right tree
     }
 
     public T min() {
@@ -65,6 +65,7 @@ public class RBT<S extends Comparable<S>, T> {
         T ret = this.item;
         this.item = null;
         this.key = null;
+        
         // readjust tree if necessary
         if (right != null) {
             if (right.key != null) {
@@ -123,6 +124,14 @@ public class RBT<S extends Comparable<S>, T> {
             this.red = true;
             this.left  = new RBT<S,T>();
             this.right = new RBT<S,T>();
+            
+        } else if (this.key.equals(key)) {
+            this.key = key; // found matching node to insert into
+            this.item = item;
+            this.red = true;
+            this.left  = new RBT<S,T>();
+            this.right = new RBT<S,T>();
+            
         } else if (less(key, this.key)) left.insert(key, item); // must go in left tree
           else                         right.insert(key, item); // must go in right tree
 
@@ -140,7 +149,7 @@ public class RBT<S extends Comparable<S>, T> {
 
     // rotate a segment left to maintain balance
     private void rotateLeft() {
-        this.left.left = new RBT<S, T>(this.left.key, this.left.item, this.left.left, this.left.right);
+        this.left.left = new RBT<S,T>(this.left.key, this.left.item, this.left.left, this.left.right);
         this.left.right = this.right.left;
         
         this.left.key = this.key;
@@ -155,7 +164,7 @@ public class RBT<S extends Comparable<S>, T> {
 
     // rotate a segment right to maintain balance
     private void rotateRight() {
-        this.right.right = new RBT<S, T>(this.right.key, this.right.item, this.right.right, this.right.left);
+        this.right.right = new RBT<S,T>(this.right.key, this.right.item, this.right.right, this.right.left);
         this.right.left = this.left.right;
         
         this.right.key = this.key;
@@ -185,7 +194,7 @@ public class RBT<S extends Comparable<S>, T> {
     }
 
     // create a tree given item and children
-    public RBT(S key, T item, RBT<S, T> left, RBT<S, T> right) {
+    public RBT(S key, T item, RBT<S,T> left, RBT<S,T> right) {
         this.key = key;
         this.item = item;
         this.left = left;

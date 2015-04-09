@@ -53,7 +53,7 @@ public class Main {
 			}
 			
 		} catch (IOException b) {
-			System.out.println("Something went wrong with downloading data.");
+			System.out.println("Something went wrong with loading HTML data.");
 			b.printStackTrace();
 		}
 		

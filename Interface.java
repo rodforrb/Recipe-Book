@@ -147,7 +147,7 @@ loop:   while (true) {
             // to get user recipe choice
             int choice = -1;
             String input;
-            while (choice < 1 || 9 < choice) {
+            while (choice < 1 || (results.size() - page*10) < choice) {
                 try {
                     System.out.print("Choice: ");
                     input = in.nextLine();

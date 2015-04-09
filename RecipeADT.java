@@ -105,8 +105,8 @@ public class RecipeADT implements Comparable<RecipeADT> {
 	}
 	
 	public int compareTo(RecipeADT b) {
-		if (rating > b.rating) return  1;
-		if (rating < b.rating) return -1;
+		if (rating > b.rating) return -1;
+		if (rating < b.rating) return  1;
 		return 0;
 	}
 }

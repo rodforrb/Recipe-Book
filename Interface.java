@@ -188,6 +188,7 @@ loop:   while (true) {
         cls();
         System.out.println("Enter ingredients separated by spaces, \nprefixed by '+' to include and \nprefixed by '-' to exclude.");
         System.out.println("ex. Search: +a +b -c +d -e \nwill return results including a, b, and d, but excluding c and e.");
+        System.out.println("When viewing search results, type 'back' to return to searching.");
     }
     
     // print lines to clear the console

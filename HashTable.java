@@ -1,5 +1,7 @@
 package recipebook;
 
+import java.util.ArrayList;
+
 // separate chaining hash table
 public class HashTable<S extends Comparable<S>,T> {
 	int M = 30;	// number of lists
@@ -92,4 +94,37 @@ public class HashTable<S extends Comparable<S>,T> {
 	public HashTable() {
 		this.table = new Node[M];
 	}
+	
+
+	public ArrayList<T> getAllOf(S key)
+	{
+		//ArrayList of recipes given an ingredient
+		ArrayList<T> recipes = null;
+		
+		int hash = hash(key);
+		if (table[hash] == null) return null;
+
+		recipes.add(table[hash].value);
+
+		//Iterate over everything
+		recipes.addAll(getAllOf(key, table[hash].tail));
+		
+		return recipes;
+	}
+	
+	//Recursive call to get all the things
+	private ArrayList<T> getAllOf(S key, Node<S, T> tail)
+	{
+		ArrayList<T> recipes = null;
+		
+		if (tail == null) return null;
+
+		recipes.add(tail.value);
+
+		//Iterate over everything
+		recipes.addAll(getAllOf(key, tail.tail));
+		
+		return recipes;
+	}
+	
 }

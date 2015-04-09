@@ -125,12 +125,8 @@ public class RBT<S extends Comparable<S>,T> {
             this.left  = new RBT<S,T>();
             this.right = new RBT<S,T>();
             
-        } else if (this.key.equals(key)) {
-            this.key = key; // found matching node to insert into
+        } else if (this.key.equals(key)) { // found matching node to insert into
             this.item = item;
-            this.red = true;
-            this.left  = new RBT<S,T>();
-            this.right = new RBT<S,T>();
             
         } else if (less(key, this.key)) left.insert(key, item); // must go in left tree
           else                         right.insert(key, item); // must go in right tree

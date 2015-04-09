@@ -30,7 +30,7 @@ public class Parser {
 		System.out.println("Progress:");
 		for (int a = 0; a < 5; a++) {
 			System.out.print(20*a);
-			for (int b = 1; b <= 30000; b++) {
+			for (int b = 1; b <= 50000; b++) {
 				// draw a progress bar
 				// save every 5000 recipes
 				if (b%5000==0) {
@@ -57,7 +57,7 @@ public class Parser {
 					meta = doc.select("meta");
 					// pull out ingredients
 					ingredients = new ArrayList<String>();
-					ingredientsArray = meta.get(2).attr("content").split(" recipe")[0].split("\\,");
+					ingredientsArray = meta.get(2).attr("content").toLowerCase().split(" recipe")[0].split("\\,");
 					for (String s : ingredientsArray) ingredients.add(s);
 					
 					// pull out description text
@@ -119,10 +119,8 @@ public class Parser {
 			list = reader.readLine().split("\\,\\,");
 			for (String s : list) directions.add(s);
 			
-			Main.recipes.insert(name, r);
-			
 			for (String s : ingredients) {
-				Main.recipesByIngredient.insert(s, r);
+				Main.recipesByIngredient.insert(s.toLowerCase(), r);
 			}
 		}
 		reader.close();

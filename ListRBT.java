@@ -64,6 +64,8 @@ public class ListRBT<T> {
             this.red = true;
             this.left  = new ListRBT<T>();
             this.right = new ListRBT<T>();
+        } else if (this.key.equals(key)) {
+            this.items.add(item);
         } else if (less(key, this.key)) left.insert(key, item); // must go in left tree
           else                         right.insert(key, item); // must go in right tree
 

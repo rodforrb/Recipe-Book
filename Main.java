@@ -33,7 +33,7 @@ public class Main {
 		try {
 			// load in file
 			Parser.loadFiles();
-			System.out.println("Loaded successfully, " + Integer.toString(recipes.size()) + " recipes.");
+			System.out.println("Loaded successfully, " + Integer.toString(recipesByIngredient.size()) + " recipes.");
 		
 		} catch (FileNotFoundException a) {
 			// can't find file, parse from website
@@ -46,6 +46,7 @@ public class Main {
 				System.out.println("Saving data to file...");
 				save();
 				System.out.println("Saved successfully.");
+				return;
 			} catch (IOException e) {
 				System.out.println("Something went wrong with saving.");
 				e.printStackTrace();

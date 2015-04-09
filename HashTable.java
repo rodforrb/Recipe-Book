@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 // separate chaining hash table
 public class HashTable<S extends Comparable<S>,T> {
-	int M = 30;	// number of lists
+	int M = 500;	// number of lists
 	Node<S,T>[] table;
 	
 	private class Node<S,T> {
@@ -96,35 +96,27 @@ public class HashTable<S extends Comparable<S>,T> {
 	}
 	
 
-	public ArrayList<T> getAllOf(S key)
+	public ArrayList<T> getAll(S key)
 	{
-		//ArrayList of recipes given an ingredient
-		ArrayList<T> recipes = null;
+		// ArrayList of recipes given an ingredient
+		ArrayList<T> recipes = new ArrayList<T>();
 		
 		int hash = hash(key);
-		if (table[hash] == null) return null;
-
-		recipes.add(table[hash].value);
-
-		//Iterate over everything
-		recipes.addAll(getAllOf(key, table[hash].tail));
+		
+		// recurse over everything if the key exists
+		if (table[hash] != null) getAll(key, table[hash], recipes);
 		
 		return recipes;
 	}
 	
 	//Recursive call to get all the things
-	private ArrayList<T> getAllOf(S key, Node<S, T> tail)
+	private void getAll(S key, Node<S,T> node, ArrayList<T> recipes)
 	{
-		ArrayList<T> recipes = null;
-		
-		if (tail == null) return null;
+        if (key.equals(node.key)) recipes.add(node.value);
+		if (node.tail == null) return;
 
-		recipes.add(tail.value);
-
-		//Iterate over everything
-		recipes.addAll(getAllOf(key, tail.tail));
-		
-		return recipes;
+		// recurse over everything
+		getAll(key, node.tail, recipes);
 	}
 	
 }

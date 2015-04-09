@@ -109,4 +109,8 @@ public class RecipeADT implements Comparable<RecipeADT> {
 		if (rating < b.rating) return  1;
 		return 0;
 	}
+	
+	public boolean equals(RecipeADT b) {
+	    return this.recipeName.equals(b.getRecipeName());
+	}
 }

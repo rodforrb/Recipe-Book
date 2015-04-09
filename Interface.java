@@ -6,6 +6,7 @@ import java.util.Scanner;
 public class Interface {
     private static Scanner in = new Scanner(System.in);
 
+    // print a nicely formatted recipe
     private static void print(RecipeADT r){
         if (r == null){
             System.out.printf("ERROR: Null Recipe.");
@@ -63,18 +64,22 @@ public class Interface {
          * @param end, the character after strings to select
          */
         ArrayList<String> ret = new ArrayList<String>();
-        String builder = "";
-        boolean open = false;
+        String builder = "";  // temporary string
+        boolean open = false; // whether the pair is open
+        // for all letters..
         for (char c : str.toCharArray()) {
+            // first character starts the word
             if (c == start) {
                 builder = "";
                 open = true;
             }
+            // last character ends the word
             else if (c == end && open) {
                 ret.add(builder);
                 builder = "";
                 open = false;
             }
+            // middle characters make the words
             else builder += c;
         }
         // add string at the end of the word
@@ -94,48 +99,58 @@ public class Interface {
         
         // get all included recipes
         RBT<RecipeADT, RecipeADT> inc = new RBT<RecipeADT, RecipeADT>();
+        
+        // get first set
         String ingredient = includes.get(0);
-        for (RecipeADT r : Main.recipesByIngredient.find(ingredient)) {
+        // for all recipes in the set..
+L1:     for (RecipeADT r : Main.recipesByIngredient.find(ingredient)) {
+    
+            // check if they contain includes
+L2:         for (String s : includes) {
+                // if not, check next recipe
+                for (String t : r.getMeasurements()) {
+                    // if one is found, check next ingredient
+                    if (t.toLowerCase().contains(s)) continue L2;
+                }
+                continue L1;
+            }
+            
+            // check if contain any excludes
+            for (String s : excludes) {
+                // if so, check next recipe
+                for (String t : r.getMeasurements()) {
+                    if (t.toLowerCase().contains(s)) continue L1;
+                }
+            }
+            
+            // if checks pass, add to tree
             inc.insert(r, r);
         }
-        
-        RBT<RecipeADT, RecipeADT> current;
-        for (int i = 1; i < includes.size(); i++) {
-            current = new RBT<RecipeADT, RecipeADT>();
-            for (RecipeADT r : Main.recipesByIngredient.find(includes.get(i))) {
-                // insert only if the recipe exists in the list already (intersection of two lists)
-                if (inc.find(r) != null) current.insert(r, r);
-            }
-            inc = current;
-        }
-        
-        // get all excluded recipes
-        RBT<String, RecipeADT> exc = new RBT<String, RecipeADT>();
-        for (String s : excludes) {
-            for (RecipeADT r : Main.recipesByIngredient.find(s)) {
-                exc.insert(r.getRecipeName(), r);
-            }
-        }
-        
-        // find results
-        for (RecipeADT r : inc.list()) {
-            // do not add if recipe is in excluded list
-            if (exc.find(r.getRecipeName()) == null) results.insert(r, null);
-        }
-        
-        return results.keys();
+        // returns the recipes sorted by rating
+        return inc.keys();
     }
     
+    // lists the results of the search
     private static void output(ArrayList<RecipeADT> results) {
+        final int RESULTS_PER_PAGE = 20;
         int page = 0;
+        int onPage;
         int j;
         
         // continue loop until returned
 loop:   while (true) {
+            // calculate how many results are on the page
+            onPage = ((page+1)*RESULTS_PER_PAGE > results.size() ? results.size()%RESULTS_PER_PAGE - 1 : RESULTS_PER_PAGE-1);
             cls();
-            System.out.println(Integer.toString(results.size()) + " results.");
-            for (int i = 1; i < 10; i++) {
-                j = i - 1 + page*10;
+            // shows "x-y / z"
+            System.out.println("Results " + 
+                               Integer.toString(page*RESULTS_PER_PAGE+1) + 
+                               "-" + Integer.toString(page*RESULTS_PER_PAGE + onPage + 1) + 
+                               "/" + Integer.toString(results.size()));
+            
+            // lists results on page
+            for (int i = 1; i <= RESULTS_PER_PAGE; i++) {
+                j = i - 1 + page*RESULTS_PER_PAGE;
                 // only print up to range
                 if (j >= results.size()) break;
                 
@@ -147,13 +162,13 @@ loop:   while (true) {
             // to get user recipe choice
             int choice = -1;
             String input;
-            while (choice < 1 || (results.size() - page*10) < choice) {
+            while (choice < 1 || onPage < choice) {
                 try {
                     System.out.print("Choice: ");
                     input = in.nextLine();
                     
                     // go to next page
-                    if (input.equals("") && page*10 < results.size()) {
+                    if (input.equals("") && page*RESULTS_PER_PAGE + onPage + 1 < results.size()) {
                         page++;
                         continue loop;
                     }
@@ -175,7 +190,7 @@ loop:   while (true) {
                 
             // valid input given, print recipe
             cls();
-            print(results.get(page*10+choice-1));
+            print(results.get(page*RESULTS_PER_PAGE+choice-1));
             
             // wait for user input
             System.out.println("Press enter to return.");
@@ -193,6 +208,7 @@ loop:   while (true) {
     
     // print lines to clear the console
     private static void cls() {
+        System.out.println("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n");
         System.out.println("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n");
         System.out.println("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n");
         System.out.println("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n");

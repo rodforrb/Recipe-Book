@@ -17,6 +17,7 @@ public class Main {
 		BufferedWriter out = new BufferedWriter(new FileWriter(file, true));
 		ArrayList<RecipeADT> list = recipes.list();
 		for (RecipeADT r : list) {
+		    // data is stored in a retrievable format
 			out.write(r.data());
 		}
 		out.close();

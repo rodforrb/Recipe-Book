@@ -2,7 +2,7 @@ package recipebook;
 
 import java.util.ArrayList;
 
-public class RecipeADT {
+public class RecipeADT implements Comparable<RecipeADT> {
 	
 	private String recipeName;
 	private double rating;

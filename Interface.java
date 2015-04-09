@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Interface {
     private static Scanner in = new Scanner(System.in);
 
-    private static void output(RecipeADT r){
+    private static void print(RecipeADT r){
         if (r == null){
             System.out.printf("ERROR: Null Recipe.");
             return;
@@ -14,7 +14,7 @@ public class Interface {
         String format =  "\n%-50s\n%-50s\n%-50s\n%-50s\n%-50s\n";
         System.out.printf(format,
                 "Recipe Name: " + r.getRecipeName(),
-                "Rating: " +Double.toString(r.getrating()) + " / 100.0", 
+                "Rating: " +Double.toString(r.getRating()) + " / 100.0", 
                 "Prep Time: " + r.getPrepTime(),
                 "Total Time: " + r.getTotalTime(),
                 "Servings: " + r.getServingSize());
@@ -34,14 +34,14 @@ public class Interface {
             
         }
         System.out.println("\n\nIngredients");
-        for (String s : r.getIngredients()){
-            System.out.println(" >>" + s);
+        for (String s : r.getMeasurements()){
+            System.out.println("    " + s);
         }
         System.out.println("\nDirections");
         int step = 0;
         for (String s: r.getDirections()){
             step++;
-            System.out.println(" " + step+". "+s);
+            System.out.println("    " + step + ". " + s);
         }
     }
 
@@ -84,24 +84,27 @@ public class Interface {
     }
 
     private static ArrayList<RecipeADT> search(String input) {
-        ArrayList<RecipeADT> results = new ArrayList<RecipeADT>();
+        // used to store results compared on rating
+        RBT<RecipeADT, RecipeADT> results = new RBT<RecipeADT, RecipeADT>();
+        // get all include queries
         ArrayList<String> includes = selectAll(input, '+', ' ');
-        if (includes.size() == 0) return results; // nothing to search for
+        if (includes.size() == 0) return results.keys(); // nothing to search for
+        // get all exclude queries
         ArrayList<String> excludes = selectAll(input, '-', ' ');
         
         // get all included recipes
-        RBT<String, RecipeADT> inc = new RBT<String, RecipeADT>();
+        RBT<RecipeADT, RecipeADT> inc = new RBT<RecipeADT, RecipeADT>();
         String ingredient = includes.get(0);
         for (RecipeADT r : Main.recipesByIngredient.find(ingredient)) {
-            inc.insert(r.getRecipeName(), r);
+            inc.insert(r, r);
         }
         
-        RBT<String, RecipeADT> current;
+        RBT<RecipeADT, RecipeADT> current;
         for (int i = 1; i < includes.size(); i++) {
-            current = new RBT<String, RecipeADT>();
+            current = new RBT<RecipeADT, RecipeADT>();
             for (RecipeADT r : Main.recipesByIngredient.find(includes.get(i))) {
                 // insert only if the recipe exists in the list already (intersection of two lists)
-                if (inc.find(r.getRecipeName()) != null) current.insert(r.getRecipeName(), r);
+                if (inc.find(r) != null) current.insert(r, r);
             }
             inc = current;
         }
@@ -117,21 +120,86 @@ public class Interface {
         // find results
         for (RecipeADT r : inc.list()) {
             // do not add if recipe is in excluded list
-            if (exc.find(r.getRecipeName()) == null) results.add(r);
+            if (exc.find(r.getRecipeName()) == null) results.insert(r, null);
         }
         
-        return results;
+        return results.keys();
+    }
+    
+    private static void output(ArrayList<RecipeADT> results) {
+        int page = 0;
+        int j;
+        
+        // continue loop until returned
+loop:   while (true) {
+            cls();
+            System.out.println(Integer.toString(results.size()) + " results.");
+            for (int i = 1; i < 10; i++) {
+                j = i - 1 + page*10;
+                // only print up to range
+                if (j >= results.size()) break;
+                
+                System.out.println(Integer.toString(i) + ": " + results.get(j).getRecipeName());
+            }
+            System.out.println("0: Previous \nEnter: next");
+            
+            
+            // to get user recipe choice
+            int choice = -1;
+            String input;
+            while (choice < 1 || 9 < choice) {
+                try {
+                    System.out.print("Choice: ");
+                    input = in.nextLine();
+                    
+                    // go to next page
+                    if (input.equals("") && page*10 < results.size()) {
+                        page++;
+                        continue loop;
+                    }
+                    
+                    // get int from input
+                    choice = Integer.parseInt(input);
+                    
+                    // go to previous page
+                    if (choice == 0 && page > 0) {
+                        page--;
+                        continue loop;
+                    }
+                    
+                } catch (Exception e) {
+                    // return on other input
+                    return;
+                }
+            }
+                
+            // valid input given, print recipe
+            cls();
+            print(results.get(page*10+choice-1));
+            
+            // wait for user input
+            System.out.println("Press enter to return.");
+            in.nextLine();
+        }
     }
     
     // print a help message
     private static void help() {
-        System.out.println();
+        cls();
         System.out.println("Enter ingredients separated by spaces, \nprefixed by '+' to include and \nprefixed by '-' to exclude.");
         System.out.println("ex. Search: +a +b -c +d -e \nwill return results including a, b, and d, but excluding c and e.");
     }
     
+    // print lines to clear the console
+    private static void cls() {
+        System.out.println("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n");
+        System.out.println("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n");
+        System.out.println("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n");
+    }
+    
     // main interaction with user
     public static void run() {
+        cls();
         System.out.println("Type 'help' for instructions.");
         ArrayList<RecipeADT> results;
         String search = getInput();
@@ -142,14 +210,8 @@ public class Interface {
             if (search.equals("help")) help();
             else {
                 results = search(search);
-                int i = 1;
-                for (RecipeADT r : results) {
-                    System.out.println(Integer.toString(i) + ": " + r.getRecipeName());
-                    i++;
-                }
-                System.out.print("Choice: ");
-                int choice = in.nextInt();
-                if (0 < choice && choice < results.size()) output(results.get(choice-1));
+                output(results);
+                cls();
             }
             
             

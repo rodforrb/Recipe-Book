@@ -49,20 +49,29 @@ public class Interface {
         ArrayList<String> includes = selectAll(input, '+', ' ');
         ArrayList<String> excludes = selectAll(input, '-', ' ');
         
-        System.out.print("include: ");
-        for (String s : includes) System.out.print(s + ',');
-        System.out.println();
-        System.out.print("exclude: ");
-        for (String s : excludes) System.out.print(s + ',');
-        System.out.println();
+        // get all included recipes
+        RBT<String, RecipeADT> inc = new RBT<String, RecipeADT>();
+        for (String s : includes) {
+            for (RecipeADT r : Main.recipesByIngredient.find(s)) {
+                inc.insert(r.getRecipeName(), r);
+            }
+        }
         
+        // get all excluded recipes
+        RBT<String, RecipeADT> exc = new RBT<String, RecipeADT>();
+        for (String s : excludes) {
+            for (RecipeADT r : Main.recipesByIngredient.find(s)) {
+                exc.insert(r.getRecipeName(), r);
+            }
+        }
         
-        //TODO need the hash table complete...
+        // find results
+        for (RecipeADT r : inc.list()) {
+            // do not add if recipe is in excluded list
+            if (exc.find(r.getRecipeName()) == null) results.add(r);
+        }
         
-        // get recipes by ingredient for each search query
-        // intersect results
-        
-        return null;
+        return results;
     }
     
     // print a help message
@@ -83,7 +92,10 @@ public class Interface {
             // do things with search string
             if (search.equals("help")) help();
             else {
-                search(search);
+                results = search(search);
+                for (RecipeADT r : results) {
+                    System.out.println(r.getRecipeName());
+                }
             }
             
             

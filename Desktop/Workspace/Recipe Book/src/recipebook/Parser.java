@@ -106,8 +106,12 @@ public class Parser {
 	
 	public static void loadFiles() throws IOException, FileNotFoundException {
 		// read from file
-		BufferedReader reader = new BufferedReader(new FileReader("data/recipes-short"));
-
+	    BufferedReader reader;
+	    try {
+	        reader = new BufferedReader(new FileReader("data/recipes"));
+	    } catch (FileNotFoundException e) {
+            reader = new BufferedReader(new FileReader("data/recipes-short"));
+	    }
 		// read all lines
 		String readLine, name;
 		String[] list;

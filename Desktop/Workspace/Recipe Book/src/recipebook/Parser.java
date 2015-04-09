@@ -23,11 +23,14 @@ public class Parser {
 		Document doc;
 		Elements meta, dirs, li, meas;
 		
+		// directories for files
 		String[] dir = new String[]{"http:", "http: (2)", "http: (3)", "http: (4)", "http: (5)"};
 				
 		System.out.println("Progress:");
+		// all 5 files
 		for (int a = 0; a < 5; a++) {
 			System.out.print(20*a);
+			// read first b files of the directory
 			for (int b = 1; b <= 50000; b++) {
 				// draw a progress bar
 				// save every 5000 recipes
@@ -41,11 +44,12 @@ public class Parser {
 					}
 				}
 				try {
-
+				    // file location
 					directory = "/home/ben/Desktop/Workspace/HTML/" + dir[a] 
 								+ "/www.food.com/recipeprint.do?rid=" 
 								+ Integer.toString(a*100000+b);
 					
+					// turn HTML file into JSoup document
 					doc = Jsoup.parse(new File(directory), "UTF-8", "");
 					
 					// pull out name of recipe
@@ -53,8 +57,10 @@ public class Parser {
 					// skip empty name recipes
 					if (name.equals("")) continue;
 					
+					// pull rating
 					rating = Double.parseDouble(doc.getElementsByTag("figure").get(0).getElementsByTag("span").text().split("%")[0]);
 
+					// only keep highly rated recipes
                     if (rating >= 80) {
                         recipe = new RecipeADT();
                         Main.recipes.insert(name, recipe);
@@ -91,6 +97,7 @@ public class Parser {
 					for (Element d : dirs) directions.add(d.text());
 					recipe.setDirections(directions);
 					
+					// get times and servings
 					li = doc.getElementsByTag("li");
 					prepTime = li.get(0).text().split(": ")[1];
 					totalTime = li.get(1).text().split(": ")[1];

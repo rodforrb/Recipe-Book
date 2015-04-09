@@ -11,6 +11,7 @@ public class RecipeADT implements Comparable<RecipeADT> {
 	private String servings;
 	private String aboutThisRecipe;
 	private ArrayList<String> ingredients = null;
+	private ArrayList<String> measurements = null;
 	private ArrayList<String> directions = null;
 	
 	//Create a blank Recipe Entry
@@ -20,6 +21,7 @@ public class RecipeADT implements Comparable<RecipeADT> {
 		totalTime = "";
 		aboutThisRecipe = "";
 		ingredients = new ArrayList<String>();
+		measurements = new ArrayList<String>();
 		directions = new ArrayList<String>();
 	}
 	
@@ -41,7 +43,7 @@ public class RecipeADT implements Comparable<RecipeADT> {
 	
 	public void setRating(double rating) { this.rating = rating; }
 	
-	public double getrating() { return rating; }
+	public double getRating() { return rating; }
 
 	public String getPrepTime() { return prepTime; }
 
@@ -62,6 +64,10 @@ public class RecipeADT implements Comparable<RecipeADT> {
 	public ArrayList<String> getIngredients() { return ingredients; }
 
 	public void setIngredients(ArrayList<String> ingredients) { this.ingredients = ingredients; }
+	
+	public ArrayList<String> getMeasurements() { return measurements; }
+	
+	public void setMeasurements(ArrayList<String> measurements) { this.measurements = measurements; } 
 
 	public ArrayList<String> getDirections() { return directions; }
 	
@@ -77,6 +83,8 @@ public class RecipeADT implements Comparable<RecipeADT> {
 		s += this.aboutThisRecipe + "\n";
 		for (String str : ingredients) s += str + ",,";
 		s += "\n";
+        for (String str : measurements) s += str + ",,";
+        s += "\n";
 		for (String dir : directions) s += dir + ",,";
 		s += "\n";
 		return s;
